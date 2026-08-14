@@ -163,10 +163,7 @@ namespace vtermemu
         auto &vt_fg = cell.fg,
              &vt_bg = cell.bg;
         auto &vt_attr = cell.attrs;
-        TColorDesired fg, bg;
-        // I prefer '{}', but GCC doesn't optimize it very well.
-        memset(&fg, 0, sizeof(fg));
-        memset(&bg, 0, sizeof(bg));
+        TColor fg, bg;
 
         if (!VTERM_COLOR_IS_DEFAULT_FG(&vt_fg))
         {
@@ -205,10 +202,10 @@ namespace vtermemu
             // double-width but Turbo Vision does, it will manage to display it
             // properly anyway. But, in the opposite case, we need to place a
             // space after the double-width character.
-            if (x > 0 && !cells[x - 1].isWide())
+            if (x > 0 && !cells[x - 1].character.isWide())
             {
-                ::setChar(cells[x], ' ');
-                ::setAttr(cells[x], ::getAttr(cells[x - 1]));
+                cells[x].character = ' ';
+                cells[x].attribute = cells[x - 1].attribute;
             }
         }
         else

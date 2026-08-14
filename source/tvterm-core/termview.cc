@@ -243,11 +243,7 @@ static RowRange rangeToCopy(int y, int cols, const TerminalSurface &surface, boo
 static void drawSelection(TScreenCell *lineBuffer, RowRange range) noexcept
 {
     for (int x = range.start; x < range.end; ++x)
-    {
-        auto attr = ::getAttr(lineBuffer[x]);
-        attr = ::reverseAttribute(attr);
-        ::setAttr(lineBuffer[x], attr);
-    }
+        lineBuffer[x].attribute = lineBuffer[x].attribute.reversed();
 }
 
 void TerminalView::updateDisplay(TerminalState &state) noexcept
